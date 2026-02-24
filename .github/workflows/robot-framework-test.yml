@@ -1,0 +1,51 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Robot framework tests playwright container
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "robot-tests"
+  robot-tests:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.58.0-noble
+    env:
+      PIP_CACHE_DIR: "GITHUB_WORKSPACE/.cache/pip"
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check out repository
+        uses: actions/checkout@v4
+      
+      - name: install dependencies
+        run: |
+          set -euxo pipefail
+          apt-get update -y
+          apt-get install -y --no-install-recommends nodejs npm python3-venv
+          node --version
+          npm --version
+          python3 -m venv /usr/local/venv
+          /usr/local/venv/bin/python -m pip install --upgrade pip
+          /usr/local/venv/bin/pip install robotframework robotframework-browser robotframework-requests
+          /usr/local/venv/bin/rfbrowser init --skip-browsers
+      - name: Run Robot framework tests
+        run: |
+          mkdir -p results
+          /usr/local/venv/bin/robot -d results test/suites
+
+      - name: Upload Robot framework results
+        uses: actions/upload-artifact@v3
+        with:
+          name: robot-framework-results
+          path: results/
+          retention-days: 7
