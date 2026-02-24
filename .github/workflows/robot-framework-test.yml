@@ -32,9 +32,9 @@ jobs:
         run: |
           set -euxo pipefail
           apt-get update -y
-          apt-get install -y --no-install-recommends nodejs npm python3-venv
           node --version
           npm --version
+          python --version
           python3 -m venv /usr/local/venv
           /usr/local/venv/bin/python -m pip install --upgrade pip
           /usr/local/venv/bin/pip install robotframework robotframework-browser robotframework-requests
