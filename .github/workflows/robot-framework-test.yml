@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p results
-          /usr/local/venv/bin/robot -d results test/suites
+          /usr/local/venv/bin/robot -d results robotframework/test/suites
 
       - name: Upload Robot framework results
         uses: actions/upload-artifact@v4
