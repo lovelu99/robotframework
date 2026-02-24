@@ -44,7 +44,7 @@ jobs:
           /usr/local/venv/bin/robot -d results test/suites
 
       - name: Upload Robot framework results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: robot-framework-results
           path: results/
